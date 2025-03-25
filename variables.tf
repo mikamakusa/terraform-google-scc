@@ -231,3 +231,151 @@ variable "source_iam_binding" {
   }))
   default = []
 }
+
+variable "v2_folder_mute_config" {
+  type = list(object({
+    id             = any
+    filter         = string
+    mute_config_id = string
+    type           = string
+    description    = optional(string)
+    location       = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_folder_notification_config" {
+  type = list(object({
+    id          = any
+    config_id   = string
+    description = optional(string)
+    location    = optional(string)
+    streaming_config = list(object({
+      filter = string
+    }))
+  }))
+  default = []
+}
+
+variable "v2_folder_scc_big_query_export" {
+  type = list(object({
+    id                  = any
+    big_query_export_id = string
+    location            = string
+    description         = optional(string)
+    filter              = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_organization_mute_config" {
+  type = list(object({
+    id             = any
+    filter         = string
+    mute_config_id = string
+    organization   = string
+    type           = string
+    location       = optional(string)
+    description    = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_organization_notification_config" {
+  type = list(object({
+    id           = any
+    config_id    = string
+    organization = string
+    description  = optional(string)
+    location     = optional(string)
+    streaming_config = list(object({
+      filter = string
+    }))
+  }))
+  default = []
+}
+
+variable "v2_organization_scc_big_query_export" {
+  type = list(object({
+    id                  = any
+    big_query_export_id = string
+    organization        = string
+    location            = string
+    description         = optional(string)
+    filter              = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_organization_scc_big_query_exports" {
+  type = list(object({
+    id                  = any
+    big_query_export_id = string
+    organization        = string
+    name                = optional(string)
+    description         = optional(string)
+    filter              = optional(string)
+    location            = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_organization_source" {
+  type = list(object({
+    id           = any
+    display_name = string
+    organization = string
+    description  = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_organization_source_iam_binding" {
+  type = list(object({
+    id           = any
+    members      = list(string)
+    organization = string
+    role         = string
+    source       = string
+  }))
+  default = []
+}
+
+variable "v2_project_mute_config" {
+  type = list(object({
+    id             = any
+    filter         = string
+    mute_config_id = string
+    type           = string
+    description    = optional(string)
+    location       = optional(string)
+    project        = optional(string)
+  }))
+  default = []
+}
+
+variable "v2_project_notification_config" {
+  type = list(object({
+    id          = any
+    config_id   = string
+    description = optional(string)
+    location    = optional(string)
+    project     = optional(string)
+    streaming_config = list(object({
+      filter = string
+    }))
+  }))
+  default = []
+}
+
+variable "v2_project_scc_big_query_export" {
+  type = list(object({
+    id                  = any
+    big_query_export_id = string
+    description         = optional(string)
+    filter              = optional(string)
+    location            = optional(string)
+    project             = optional(string)
+  }))
+  default = []
+}

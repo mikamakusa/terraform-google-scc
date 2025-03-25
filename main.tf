@@ -267,3 +267,137 @@ resource "google_scc_source_iam_binding" "this" {
   role         = lookup(var.source_iam_binding[count.index], "role")
   source       = lookup(var.source_iam_binding[count.index], "source")
 }
+
+resource "google_scc_v2_folder_mute_config" "this" {
+  count          = length(var.v2_folder_mute_config)
+  filter         = lookup(var.v2_folder_mute_config[count.index], "filter")
+  folder         = data.google_folder.this.folder_id
+  mute_config_id = lookup(var.v2_folder_mute_config[count.index], "mute_config_id")
+  type           = lookup(var.v2_folder_mute_config[count.index], "type")
+  description    = lookup(var.v2_folder_mute_config[count.index], "description")
+  location       = lookup(var.v2_folder_mute_config[count.index], "location")
+}
+
+resource "google_scc_v2_folder_notification_config" "this" {
+  count        = length(var.v2_folder_notification_config)
+  config_id    = lookup(var.v2_folder_notification_config[count.index], "config_id")
+  folder       = data.google_folder.this.folder_id
+  pubsub_topic = data.google_pubsub_topic.this.id
+  description  = lookup(var.v2_folder_notification_config[count.index], "description")
+  location     = lookup(var.v2_folder_notification_config[count.index], "location")
+
+  dynamic "streaming_config" {
+    for_each = lookup(var.v2_folder_notification_config[count.index], "streaming_config")
+    content {
+      filter = lookup(streaming_config.value, "filter")
+    }
+  }
+}
+
+resource "google_scc_v2_folder_scc_big_query_export" "this" {
+  count               = length(var.v2_folder_scc_big_query_export)
+  big_query_export_id = lookup(var.v2_folder_scc_big_query_export[count.index], "big_query_export_id")
+  folder              = data.google_folder.this.folder_id
+  dataset             = try(data.google_bigquery_dataset.this.id)
+  location            = lookup(var.v2_folder_scc_big_query_export[count.index], "location")
+  description         = lookup(var.v2_folder_scc_big_query_export[count.index], "description")
+  filter              = lookup(var.v2_folder_scc_big_query_export[count.index], "filter")
+}
+
+resource "google_scc_v2_organization_mute_config" "this" {
+  count          = length(var.v2_organization_mute_config)
+  filter         = lookup(var.v2_organization_mute_config[count.index], "filter")
+  mute_config_id = lookup(var.v2_organization_mute_config[count.index], "mute_config_id")
+  organization   = lookup(var.v2_organization_mute_config[count.index], "organization")
+  type           = lookup(var.v2_organization_mute_config[count.index], "type")
+  location       = lookup(var.v2_organization_mute_config[count.index], "location")
+  description    = lookup(var.v2_organization_mute_config[count.index], "description")
+}
+
+resource "google_scc_v2_organization_notification_config" "this" {
+  count        = length(var.v2_organization_notification_config)
+  config_id    = lookup(var.v2_organization_notification_config[count.index], "config_id")
+  organization = lookup(var.v2_organization_notification_config[count.index], "organization")
+  pubsub_topic = data.google_pubsub_topic.this.id
+  description  = lookup(var.v2_organization_notification_config[count.index], "description")
+  location     = lookup(var.v2_organization_notification_config[count.index], "location")
+
+  dynamic "streaming_config" {
+    for_each = lookup(var.v2_organization_notification_config[count.index], "streaming_config")
+    content {
+      filter = lookup(streaming_config.value, "filter")
+    }
+  }
+}
+
+resource "google_scc_v2_organization_scc_big_query_export" "this" {
+  count               = length(var.v2_organization_scc_big_query_export)
+  big_query_export_id = lookup(var.v2_folder_scc_big_query_export[count.index], "big_query_export_id")
+  dataset             = try(data.google_bigquery_dataset.this.id)
+  location            = lookup(var.v2_folder_scc_big_query_export[count.index], "location")
+  description         = lookup(var.v2_folder_scc_big_query_export[count.index], "description")
+  filter              = lookup(var.v2_folder_scc_big_query_export[count.index], "filter")
+  organization        = lookup(var.v2_organization_scc_big_query_export, "organization")
+}
+
+resource "google_scc_v2_organization_scc_big_query_exports" "this" {
+  count               = length(var.v2_organization_scc_big_query_exports)
+  big_query_export_id = lookup(var.v2_organization_scc_big_query_exports[count.index], "big_query_export_id")
+  organization        = lookup(var.v2_organization_scc_big_query_exports[count.index], "organization")
+  name                = lookup(var.v2_organization_scc_big_query_exports[count.index], "name")
+  description         = lookup(var.v2_organization_scc_big_query_exports[count.index], "description")
+  filter              = lookup(var.v2_organization_scc_big_query_exports[count.index], "filter")
+  location            = lookup(var.v2_organization_scc_big_query_exports[count.index], "location")
+  dataset             = try(data.google_bigquery_dataset.this.id)
+}
+
+resource "google_scc_v2_organization_source" "this" {
+  count        = length(var.v2_organization_source)
+  display_name = lookup(var.v2_organization_source[count.index], "display_name")
+  organization = lookup(var.v2_organization_source[count.index], "organization")
+  description  = lookup(var.v2_organization_source[count.index], "description")
+}
+
+resource "google_scc_v2_organization_source_iam_binding" "this" {
+  count        = length(var.v2_organization_source_iam_binding)
+  members      = lookup(var.v2_organization_source_iam_binding[count.index], "members")
+  organization = lookup(var.v2_organization_source_iam_binding[count.index], "organization")
+  role         = lookup(var.v2_organization_source_iam_binding[count.index], "role")
+  source       = lookup(var.v2_organization_source_iam_binding[count.index], "source")
+}
+
+resource "google_scc_v2_project_mute_config" "this" {
+  count          = length(var.v2_project_mute_config)
+  filter         = lookup(var.v2_project_mute_config[count.index], "filter")
+  mute_config_id = lookup(var.v2_project_mute_config[count.index], "mute_config_id")
+  type           = lookup(var.v2_project_mute_config[count.index], "type")
+  description    = lookup(var.v2_project_mute_config[count.index], "description")
+  location       = lookup(var.v2_project_mute_config[count.index], "location")
+  project        = lookup(var.v2_project_mute_config[count.index], "project")
+}
+
+resource "google_scc_v2_project_notification_config" "this" {
+  count        = length(var.v2_project_notification_config)
+  config_id    = lookup(var.v2_project_notification_config[count.index], "config_id")
+  pubsub_topic = data.google_pubsub_topic.this.id
+  description  = lookup(var.v2_project_notification_config[count.index], "description")
+  location     = lookup(var.v2_project_notification_config[count.index], "location")
+  project      = lookup(var.v2_project_notification_config[count.index], "project")
+
+  dynamic "streaming_config" {
+    for_each = lookup(var.v2_project_notification_config[count.index], "streaming_config")
+    content {
+      filter = lookup(streaming_config.value, "filter")
+    }
+  }
+}
+
+resource "google_scc_v2_project_scc_big_query_export" "this" {
+  count               = length(var.v2_project_scc_big_query_export)
+  big_query_export_id = lookup(var.v2_project_scc_big_query_export[count.index], "big_query_export_id")
+  description         = lookup(var.v2_project_scc_big_query_export[count.index], "description")
+  filter              = lookup(var.v2_project_scc_big_query_export[count.index], "filter")
+  location            = lookup(var.v2_project_scc_big_query_export[count.index], "location")
+  project             = lookup(var.v2_project_scc_big_query_export[count.index], "project")
+  dataset             = try(data.google_bigquery_dataset.this.id)
+}
